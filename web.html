@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jewels.shop — Timeless Elegance</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --gold:#c9a227; --gold-light:#e8cf7a; --gold-dark:#8a6d1d;
+    --dark:#16141f; --ink:#2b2b33; --muted:#8a8794;
+    --cream:#faf7f1; --white:#fff;
+    --shadow:0 10px 30px rgba(22,20,31,.10);
+    --radius:16px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{font-family:'Jost',sans-serif;color:var(--ink);background:var(--cream);overflow-x:hidden}
+  h1,h2,h3,.serif{font-family:'Playfair Display',serif}
+  button{font-family:inherit;cursor:pointer;border:none;background:none}
+  a{text-decoration:none;color:inherit}
+  ::selection{background:var(--gold-light)}
+
+  .promo-bar{background:var(--dark);color:var(--gold-light);text-align:center;font-size:.85rem;
+    letter-spacing:.12em;padding:.55rem 1rem;text-transform:uppercase}
+  .promo-bar b{color:#fff}
+
+  header{position:sticky;top:0;z-index:100;background:rgba(250,247,241,.92);backdrop-filter:blur(10px);transition:box-shadow .3s}
+  header.scrolled{box-shadow:var(--shadow)}
+  .nav{max-width:1240px;margin:auto;display:flex;align-items:center;gap:2rem;padding:1rem 1.5rem}
+  .logo{font-family:'Playfair Display',serif;font-size:1.7rem;color:var(--dark);white-space:nowrap}
+  .logo span{color:var(--gold);font-style:italic}
+  .nav-links{display:flex;gap:1.8rem;list-style:none;margin-right:auto}
+  .nav-links a{font-size:.95rem;letter-spacing:.06em;text-transform:uppercase;position:relative;padding:.2rem 0}
+  .nav-links a::after{content:'';position:absolute;left:0;bottom:-2px;width:0;height:2px;background:var(--gold);transition:width .3s}
+  .nav-links a:hover::after{width:100%}
+  .search-wrap{position:relative;display:flex;align-items:center}
+  .search-wrap input{border:1px solid #e3ded2;background:#fff;border-radius:999px;padding:.5rem .9rem .5rem 2.3rem;
+    font-family:inherit;font-size:.9rem;width:190px;outline:none;transition:width .3s, box-shadow .3s}
+  .search-wrap input:focus{width:240px;box-shadow:0 0 0 3px rgba(201,162,39,.18)}
+  .search-wrap svg{position:absolute;left:.8rem;width:15px;height:15px;stroke:var(--muted)}
+  .icon-btn{position:relative;width:42px;height:42px;border-radius:50%;display:grid;place-items:center;transition:background .25s}
+  .icon-btn:hover{background:#efe9da}
+  .icon-btn svg{width:21px;height:21px;stroke:var(--dark);fill:none;stroke-width:1.7}
+  .badge{position:absolute;top:2px;right:0;background:var(--gold);color:#fff;font-size:.68rem;font-weight:600;
+    min-width:18px;height:18px;border-radius:999px;display:grid;place-items:center;padding:0 4px;
+    transform:scale(0);transition:transform .25s cubic-bezier(.68,-.55,.27,1.55)}
+  .badge.show{transform:scale(1)}
+  .hamburger{display:none}
+  .hamburger span{display:block;width:22px;height:2px;background:var(--dark);margin:5px 0}
+
+  .hero{position:relative;background:radial-gradient(1200px 500px at 70% 20%, #2c2740 0%, var(--dark) 60%);color:#fff;overflow:hidden}
+  .hero-inner{max-width:1240px;margin:auto;padding:6rem 1.5rem 7rem;display:grid;grid-template-columns:1.1fr .9fr;gap:2rem;align-items:center}
+  .kicker{color:var(--gold-light);letter-spacing:.35em;text-transform:uppercase;font-size:.8rem;margin-bottom:1.2rem}
+  .hero h1{font-size:clamp(2.4rem,5vw,4rem);line-height:1.1;font-weight:500}
+  .hero h1 em{color:var(--gold-light);font-style:italic}
+  .hero p{margin:1.4rem 0 2.2rem;color:#c9c5d4;max-width:46ch;font-weight:300;font-size:1.05rem}
+  .btn{display:inline-flex;align-items:center;gap:.6rem;background:var(--gold);color:#fff;font-weight:500;
+    letter-spacing:.08em;text-transform:uppercase;font-size:.85rem;padding:.95rem 2rem;border-radius:999px;
+    transition:transform .25s, box-shadow .25s, background .25s}
+  .btn:hover{background:var(--gold-dark);transform:translateY(-2px);box-shadow:0 12px 24px rgba(201,162,39,.35)}
+  .hero-art{position:relative;display:grid;place-items:center;min-height:320px}
+  .hero-ring{width:min(340px,70%);filter:drop-shadow(0 30px 50px rgba(201,162,39,.35));animation:float 6s ease-in-out infinite}
+  @keyframes float{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-18px) rotate(3deg)}}
+  .sparkle{position:absolute;color:var(--gold-light);animation:twinkle 3s ease-in-out infinite}
+  @keyframes twinkle{0%,100%{opacity:.25;transform:scale(.8)}50%{opacity:1;transform:scale(1.15)}}
+  .hero-stats{display:flex;gap:2.5rem;margin-top:3rem}
+  .hero-stats b{font-family:'Playfair Display',serif;font-size:1.6rem;color:var(--gold-light);display:block}
+  .hero-stats small{color:#a7a3b5;letter-spacing:.08em;text-transform:uppercase;font-size:.72rem}
+
+  .features{background:#fff;border-bottom:1px solid #efe9da}
+  .features-inner{max-width:1240px;margin:auto;display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;padding:2rem 1.5rem}
+  .feature{display:flex;gap:.9rem;align-items:center;justify-content:center}
+  .feature .f-ico{width:44px;height:44px;border-radius:50%;background:var(--cream);display:grid;place-items:center;font-size:1.25rem}
+  .feature b{display:block;font-size:.92rem}
+  .feature small{color:var(--muted)}
+
+  section{padding:4.5rem 0}
+  .container{max-width:1240px;margin:auto;padding:0 1.5rem}
+  .sec-head{text-align:center;margin-bottom:2.5rem}
+  .sec-head h2{font-size:clamp(1.8rem,3.4vw,2.6rem);font-weight:500}
+  .sec-head p{color:var(--muted);margin-top:.5rem}
+
+  .cats{display:grid;grid-template-columns:repeat(5,1fr);gap:1.2rem}
+  .cat-card{background:#fff;border-radius:var(--radius);padding:2rem 1rem;text-align:center;cursor:pointer;
+    transition:transform .3s, box-shadow .3s;border:1px solid #f0ead9}
+  .cat-card:hover{transform:translateY(-6px);box-shadow:var(--shadow)}
+  .cat-card svg{width:64px;height:64px;margin-bottom:.8rem}
+  .cat-card b{font-family:'Playfair Display',serif;font-size:1.05rem;font-weight:500}
+  .cat-card small{display:block;color:var(--muted);margin-top:.2rem}
+
+  .toolbar{display:flex;flex-wrap:wrap;gap:1rem;align-items:center;justify-content:space-between;margin-bottom:2rem}
+  .chips{display:flex;gap:.6rem;flex-wrap:wrap}
+  .chip{padding:.55rem 1.3rem;border-radius:999px;border:1px solid #e3dcc8;background:#fff;font-size:.88rem;letter-spacing:.05em;transition:.25s}
+  .chip:hover{border-color:var(--gold)}
+  .chip.active{background:var(--dark);color:var(--gold-light);border-color:var(--dark)}
+  .sort-wrap{display:flex;align-items:center;gap:.6rem;color:var(--muted);font-size:.9rem}
+  .sort-wrap select{font-family:inherit;padding:.55rem .9rem;border-radius:10px;border:1px solid #e3dcc8;background:#fff;outline:none}
+  .wish-note{display:none;background:#fdeef0;color:#b0344a;padding:.5rem 1rem;border-radius:10px;font-size:.85rem;align-items:center;gap:.6rem}
+  .wish-note.show{display:inline-flex}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(255px,1fr));gap:1.6rem}
+  .card{background:#fff;border-radius:var(--radius);overflow:hidden;position:relative;transition:transform .35s, box-shadow .35s;animation:pop .5s ease both}
+  @keyframes pop{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+  .card:hover{transform:translateY(-6px);box-shadow:var(--shadow)}
+  .p-visual{position:relative;height:230px;display:grid;place-items:center;cursor:pointer}
+  .p-visual svg{width:130px;height:130px;transition:transform .4s}
+  .card:hover .p-visual svg{transform:scale(1.12) rotate(-4deg)}
+  .p-badge{position:absolute;top:14px;left:14px;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;
+    padding:.3rem .7rem;border-radius:999px;background:var(--dark);color:var(--gold-light)}
+  .p-badge.sale{background:#b0344a;color:#fff}
+  .p-badge.new{background:#2e6e4e;color:#fff}
+  .wish-btn{position:absolute;top:10px;right:10px;width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.85);
+    display:grid;place-items:center;transition:.25s;z-index:2}
+  .wish-btn:hover{transform:scale(1.12)}
+  .wish-btn svg{width:18px;height:18px;fill:none;stroke:#b0344a;stroke-width:1.8;transition:.25s}
+  .wish-btn.on svg{fill:#b0344a}
+  .p-overlay{position:absolute;inset:auto 0 0;padding:.8rem;display:flex;justify-content:center;
+    background:linear-gradient(transparent,rgba(22,20,31,.25));opacity:0;transform:translateY(8px);transition:.3s}
+  .card:hover .p-overlay{opacity:1;transform:none}
+  .qv-btn{background:rgba(255,255,255,.95);padding:.5rem 1.2rem;border-radius:999px;font-size:.8rem;
+    letter-spacing:.08em;text-transform:uppercase;box-shadow:var(--shadow)}
+  .p-info{padding:1.1rem 1.2rem 1.4rem}
+  .p-cat{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+  .p-name{font-family:'Playfair Display',serif;font-size:1.12rem;margin:.25rem 0 .35rem;font-weight:500}
+  .stars{color:var(--gold);font-size:.85rem;letter-spacing:.1em}
+  .stars small{color:var(--muted);margin-left:.35rem}
+  .p-bottom{display:flex;align-items:center;justify-content:space-between;margin-top:.7rem}
+  .price{font-weight:600;font-size:1.05rem}
+  .price s{color:var(--muted);font-weight:400;font-size:.85rem;margin-left:.4rem}
+  .add-btn{background:var(--dark);color:#fff;border-radius:999px;padding:.55rem 1.1rem;font-size:.8rem;
+    letter-spacing:.06em;text-transform:uppercase;transition:.25s}
+  .add-btn:hover{background:var(--gold)}
+  .empty-msg{grid-column:1/-1;text-align:center;color:var(--muted);padding:3rem 0}
+
+  .banner{background:linear-gradient(120deg,#1d1930,#3a2f56);color:#fff;text-align:center;border-radius:24px;padding:4rem 2rem}
+  .banner h2{font-size:clamp(1.7rem,3.5vw,2.6rem);font-weight:500}
+  .banner h2 em{color:var(--gold-light)}
+  .banner p{color:#c9c5d4;margin:.8rem auto 1.8rem;max-width:52ch}
+  .code-pill{display:inline-block;border:1px dashed var(--gold-light);color:var(--gold-light);
+    padding:.5rem 1.4rem;border-radius:999px;letter-spacing:.2em;margin-left:.6rem}
+
+  .newsletter{background:#fff;border-top:1px solid #efe9da}
+  .news-inner{max-width:640px;margin:auto;text-align:center}
+  .news-form{display:flex;gap:.6rem;margin-top:1.6rem;flex-wrap:wrap;justify-content:center}
+  .news-form input{flex:1;min-width:230px;padding:.95rem 1.2rem;border-radius:999px;border:1px solid #e3dcc8;font-family:inherit;outline:none}
+  .news-form input:focus{border-color:var(--gold)}
+  .news-ok{color:#2e6e4e;margin-top:1rem;display:none}
+
+  footer{background:var(--dark);color:#a7a3b5;padding:4rem 0 2rem}
+  .foot-grid{max-width:1240px;margin:auto;padding:0 1.5rem;display:grid;grid-template-columns:2fr 1fr 1fr 1.4fr;gap:2.5rem}
+  footer h4{color:#fff;font-family:'Playfair Display',serif;font-weight:500;margin-bottom:1.1rem;font-size:1.05rem}
+  footer ul{list-style:none;display:grid;gap:.55rem;font-size:.92rem}
+  footer a:hover{color:var(--gold-light)}
+  .foot-logo{font-size:1.6rem;color:#fff;margin-bottom:.8rem}
+  .foot-logo span{color:var(--gold-light);font-style:italic}
+  .foot-bottom{max-width:1240px;margin:auto;padding:2rem 1.5rem 0;border-top:1px solid #26222f;margin-top:3rem;
+    display:flex;justify-content:space-between;flex-wrap:wrap;gap:.8rem;font-size:.85rem}
+  .pay-badges{display:flex;gap:.5rem}
+  .pay-badges span{border:1px solid #35313f;border-radius:6px;padding:.2rem .6rem;font-size:.72rem}
+  .admin-link{color:inherit;text-decoration:underline;font-size:.85rem}
+  .admin-link:hover{color:var(--gold-light)}
+
+  .overlay{position:fixed;inset:0;background:rgba(22,20,31,.5);opacity:0;pointer-events:none;transition:.35s;z-index:200}
+  .overlay.show{opacity:1;pointer-events:auto}
+  .drawer{position:fixed;top:0;right:0;height:100%;width:min(420px,100%);background:#fff;z-index:210;
+    transform:translateX(105%);transition:transform .4s cubic-bezier(.22,1,.36,1);display:flex;flex-direction:column}
+  .drawer.open{transform:none}
+  .drawer-head{display:flex;align-items:center;justify-content:space-between;padding:1.3rem 1.5rem;border-bottom:1px solid #f0ead9}
+  .drawer-head h3{font-size:1.25rem;font-weight:500}
+  .close-x{font-size:1.5rem;line-height:1;color:var(--muted);padding:.2rem .5rem}
+  .close-x:hover{color:var(--dark)}
+  .cart-items{flex:1;overflow-y:auto;padding:1rem 1.5rem;display:grid;gap:1rem;align-content:start}
+  .c-item{display:grid;grid-template-columns:76px 1fr auto;gap:1rem;align-items:center;animation:pop .35s ease}
+  .c-thumb{width:76px;height:76px;border-radius:12px;display:grid;place-items:center}
+  .c-thumb svg{width:52px;height:52px}
+  .c-name{font-family:'Playfair Display',serif;font-size:.98rem}
+  .c-price{color:var(--gold-dark);font-weight:600;font-size:.9rem;margin:.15rem 0}
+  .qty{display:inline-flex;align-items:center;gap:.55rem;border:1px solid #e3dcc8;border-radius:999px;padding:.2rem .6rem}
+  .qty button{font-size:1rem;width:20px;color:var(--muted)}
+  .qty b{min-width:16px;text-align:center;font-size:.9rem}
+  .c-remove{color:var(--muted);font-size:.8rem;text-decoration:underline}
+  .c-remove:hover{color:#b0344a}
+  .cart-empty{text-align:center;color:var(--muted);padding:3.5rem 1rem}
+  .cart-empty svg{width:70px;height:70px;stroke:#d8d2c2;fill:none;stroke-width:1.4;margin-bottom:1rem}
+  .drawer-foot{border-top:1px solid #f0ead9;padding:1.2rem 1.5rem 1.5rem}
+  .promo-row{display:flex;gap:.5rem;margin-bottom:1rem}
+  .promo-row input{flex:1;border:1px solid #e3dcc8;border-radius:999px;padding:.55rem 1rem;font-family:inherit;outline:none;text-transform:uppercase}
+  .promo-row button{border:1px solid var(--dark);border-radius:999px;padding:.55rem 1.1rem;font-size:.8rem}
+  .promo-row button:hover{background:var(--dark);color:var(--gold-light)}
+  .promo-applied{font-size:.82rem;color:#2e6e4e;margin:-.4rem 0 .8rem;display:none}
+  .total-row{display:flex;justify-content:space-between;font-size:.95rem;margin-bottom:.3rem}
+  .total-row.grand{font-size:1.15rem;font-weight:600;margin:.6rem 0 1.1rem}
+  .total-row.grand span:last-child{color:var(--gold-dark)}
+  .checkout-btn{width:100%;justify-content:center}
+
+  .modal{position:fixed;inset:0;z-index:220;display:grid;place-items:center;padding:1.2rem;opacity:0;pointer-events:none;transition:.3s}
+  .modal.show{opacity:1;pointer-events:auto}
+  .modal-card{background:#fff;border-radius:20px;max-width:760px;width:100%;max-height:90vh;overflow-y:auto;
+    position:relative;transform:scale(.94);transition:.3s;box-shadow:0 30px 80px rgba(0,0,0,.3)}
+  .modal.show .modal-card{transform:none}
+  .modal .close-x{position:absolute;top:.8rem;right:1rem;z-index:2}
+  .qv-grid{display:grid;grid-template-columns:1fr 1fr}
+  .qv-visual{display:grid;place-items:center;min-height:340px;border-radius:20px 0 0 20px}
+  .qv-visual svg{width:210px;height:210px}
+  .qv-info{padding:2.4rem 2.2rem}
+  .qv-info .p-name{font-size:1.7rem;margin:.2rem 0 .6rem}
+  .qv-info p.desc{color:var(--muted);margin:.9rem 0 1.4rem;line-height:1.6}
+  .qv-price{font-size:1.5rem;font-weight:600;color:var(--gold-dark)}
+  .qv-row{display:flex;align-items:center;gap:1rem;margin-top:1.5rem;flex-wrap:wrap}
+  .qv-qty{display:inline-flex;align-items:center;gap:.9rem;border:1px solid #e3dcc8;border-radius:999px;padding:.55rem 1rem}
+  .qv-qty button{font-size:1.15rem;color:var(--muted)}
+  .qv-qty b{min-width:18px;text-align:center}
+
+  .co-wrap{padding:2.4rem}
+  .co-wrap h3{font-size:1.5rem;font-weight:500;margin-bottom:1.4rem}
+  .co-summary{background:var(--cream);border-radius:14px;padding:1.2rem 1.4rem;margin-bottom:1.4rem;font-size:.93rem}
+  .co-line{display:flex;justify-content:space-between;padding:.3rem 0;color:var(--muted)}
+  .co-line b{color:var(--ink)}
+  .co-form{display:grid;gap:.8rem;grid-template-columns:1fr 1fr}
+  .co-form input,.co-form select,.co-form textarea{padding:.85rem 1rem;border:1px solid #e3dcc8;border-radius:12px;
+    font-family:inherit;outline:none;width:100%;background:#fff;font-size:.95rem}
+  .co-form input:focus,.co-form select:focus,.co-form textarea:focus{border-color:var(--gold)}
+  .co-form .full{grid-column:1/-1}
+  .co-success{text-align:center;padding:3rem 2rem;display:none}
+  .co-success .tick{width:74px;height:74px;border-radius:50%;background:#e5f3ea;color:#2e6e4e;font-size:2rem;
+    display:grid;place-items:center;margin:0 auto 1.2rem}
+  .co-success p{color:var(--muted)}
+
+  /* Firebase extras */
+  .seed-banner{display:none;align-items:center;gap:1rem;flex-wrap:wrap;background:#fff8e4;border:1px dashed var(--gold);
+    border-radius:14px;padding:1rem 1.4rem;margin-bottom:1.8rem;font-size:.95rem}
+  .db-status{font-size:.85rem;margin-bottom:1.2rem}
+  .admin-list{max-height:230px;overflow-y:auto;margin-top:1.2rem;border:1px solid #f0ead9;border-radius:12px;padding:.4rem 1rem}
+  .admin-item{display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:.6rem 0;
+    border-bottom:1px solid #f0ead9;font-size:.93rem}
+  .admin-item:last-child{border-bottom:none}
+  .admin-item small{color:var(--muted)}
+  .admin-item button{color:#b0344a;text-decoration:underline;font-size:.82rem}
+
+  .toast{position:fixed;left:50%;bottom:2rem;transform:translate(-50%,150%);background:var(--dark);color:#fff;
+    padding:.9rem 1.6rem;border-radius:999px;z-index:300;display:flex;gap:.6rem;align-items:center;
+    box-shadow:0 15px 40px rgba(0,0,0,.35);transition:transform .4s cubic-bezier(.22,1,.36,1);font-size:.92rem}
+  .toast.show{transform:translate(-50%,0)}
+  .toast .t-ico{color:var(--gold-light)}
+
+  .reveal{opacity:0;transform:translateY(26px);transition:opacity .7s ease, transform .7s ease}
+  .reveal.visible{opacity:1;transform:none}
+
+  @media(max-width:980px){
+    .hero-inner{grid-template-columns:1fr;text-align:center;padding:4rem 1.5rem 5rem}
+    .hero p{margin-inline:auto}
+    .hero-stats{justify-content:center}
+    .hero-art{order:-1}
+    .cats{grid-template-columns:repeat(3,1fr)}
+    .features-inner{grid-template-columns:repeat(2,1fr)}
+    .feature{justify-content:flex-start}
+    .foot-grid{grid-template-columns:1fr 1fr}
+  }
+  @media(max-width:760px){
+    .nav-links{position:fixed;inset:64px 0 auto;flex-direction:column;background:#fff;padding:1.5rem 2rem 2rem;
+      gap:1.2rem;box-shadow:var(--shadow);transform:translateY(-130%);transition:.35s;margin:0}
+    .nav-links.open{transform:none}
+    .hamburger{display:block;margin-left:auto;order:3}
+    .search-wrap{order:4;flex:1}
+    .search-wrap input,.search-wrap input:focus{width:100%}
+    .nav{flex-wrap:wrap;gap:.8rem}
+    .cats{grid-template-columns:repeat(2,1fr)}
+    .qv-grid{grid-template-columns:1fr}
+    .qv-visual{border-radius:20px 20px 0 0;min-height:240px}
+    .foot-grid{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="goldGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f5d98b"/><stop offset="50%" stop-color="#c9a227"/><stop offset="100%" stop-color="#8a6d1d"/>
+    </linearGradient>
+    <linearGradient id="gemGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ffffff"/><stop offset="55%" stop-color="#dfe9f5"/><stop offset="100%" stop-color="#aebfd6"/>
+    </linearGradient>
+  </defs>
+</svg>
+
+<div class="promo-bar">✦ Enjoy <b>10% off</b> your first order — use code <b>WELCOME10</b> at checkout ✦</div>
+
+<header id="header">
+  <nav class="nav">
+    <a class="logo" href="#home">Jewels<span>.shop</span></a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#home">Home</a></li>
+      <li><a href="#shop">Shop</a></li>
+      <li><a href="#collections">Collections</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <div class="search-wrap">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input type="text" id="searchInput" placeholder="Search jewelry…">
+    </div>
+    <button class="icon-btn" id="wishNavBtn" title="Wishlist">
+      <svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.7-10-9.3C.6 8.6 2.6 5 6.2 5c2.2 0 3.7 1.2 4.6 2.6L12 9l1.2-1.4C14.1 6.2 15.6 5 17.8 5c3.6 0 5.6 3.6 4.2 6.7C19.5 16.3 12 21 12 21z"/></svg>
+      <span class="badge" id="wishBadge">0</span>
+    </button>
+    <button class="icon-btn" id="cartBtn" title="Cart">
+      <svg viewBox="0 0 24 24"><path d="M6 7h12l-1.2 12.2a2 2 0 0 1-2 1.8H9.2a2 2 0 0 1-2-1.8L6 7z"/><path d="M9 10V6a3 3 0 0 1 6 0v4"/></svg>
+      <span class="badge" id="cartBadge">0</span>
+    </button>
+    <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+  </nav>
+</header>
+
+<section class="hero" id="home">
+  <div class="hero-inner">
+    <div>
+      <p class="kicker">Fine Jewelry · Est. 2024</p>
+      <h1>Timeless Elegance, <em>Crafted</em> for You</h1>
+      <p>Discover hand-finished rings, necklaces and more — ethically sourced gemstones set in solid gold, made to be worn every day and treasured forever.</p>
+      <a href="#shop" class="btn">Shop the Collection
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+      </a>
+      <div class="hero-stats">
+        <div><b>12k+</b><small>Happy Customers</small></div>
+        <div><b>4.9★</b><small>Average Rating</small></div>
+        <div><b>100%</b><small>Ethically Sourced</small></div>
+      </div>
+    </div>
+    <div class="hero-art">
+      <svg class="hero-ring" viewBox="0 0 200 200">
+        <circle cx="100" cy="122" r="52" fill="none" stroke="url(#goldGrad)" stroke-width="11"/>
+        <path d="M100 30 L134 66 L100 102 L66 66 Z" fill="url(#gemGrad)" stroke="#b8c4d4" stroke-width="2"/>
+        <path d="M80 100 L120 100 L112 116 L88 116 Z" fill="url(#goldGrad)"/>
+      </svg>
+      <span class="sparkle" style="top:12%;left:18%;font-size:1.4rem">✦</span>
+      <span class="sparkle" style="top:24%;right:14%;font-size:1rem;animation-delay:.8s">✦</span>
+      <span class="sparkle" style="bottom:16%;left:26%;font-size:1.1rem;animation-delay:1.6s">✦</span>
+    </div>
+  </div>
+</section>
+
+<div class="features">
+  <div class="features-inner">
+    <div class="feature"><div class="f-ico">🚚</div><div><b>Free Shipping</b><small>On orders over $150</small></div></div>
+    <div class="feature"><div class="f-ico">↩️</div><div><b>30-Day Returns</b><small>No questions asked</small></div></div>
+    <div class="feature"><div class="f-ico">🛡️</div><div><b>Lifetime Warranty</b><small>Craftsmanship guaranteed</small></div></div>
+    <div class="feature"><div class="f-ico">🔒</div><div><b>Secure Payment</b><small>256-bit encryption</small></div></div>
+  </div>
+</div>
+
+<section id="collections">
+  <div class="container">
+    <div class="sec-head reveal"><p class="kicker" style="color:var(--gold)">Browse By</p><h2>Our Collections</h2></div>
+    <div class="cats reveal" id="catGrid"></div>
+  </div>
+</section>
+
+<section id="shop" style="padding-top:1rem">
+  <div class="container">
+    <div class="sec-head reveal"><p class="kicker" style="color:var(--gold)">Handpicked</p><h2>Best Sellers</h2>
+      <p>Each piece is finished by hand in our atelier.</p></div>
+
+    <!-- Shown automatically when your Firebase database is empty -->
+    <div class="seed-banner" id="seedBanner">
+      📦 Your Firebase database is empty.
+      <button class="btn" style="padding:.6rem 1.4rem" id="seedBtn">Load 12 demo products</button>
+    </div>
+
+    <div class="toolbar reveal">
+      <div class="chips" id="filterChips"></div>
+      <div style="display:flex;gap:.8rem;align-items:center;flex-wrap:wrap">
+        <span class="wish-note" id="wishNote">♥ Showing wishlist only <button id="clearWishFilter" style="text-decoration:underline;color:inherit">clear</button></span>
+        <div class="sort-wrap">Sort
+          <select id="sortSelect">
+            <option value="featured">Featured</option>
+            <option value="low">Price: Low → High</option>
+            <option value="high">Price: High → Low</option>
+            <option value="rating">Top Rated</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid" id="productGrid"></div>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <div class="container">
+    <div class="banner reveal">
+      <h2>Gift <em>Timeless</em> This Season</h2>
+      <p>Wrap it right: every order arrives in our signature gold-embossed box with a personal note — complimentary.</p>
+      <a href="#shop" class="btn">Shop Gifts</a><span class="code-pill">WELCOME10</span>
+    </div>
+  </div>
+</section>
+
+<section class="newsletter" id="contact">
+  <div class="container news-inner reveal">
+    <p class="kicker" style="color:var(--gold)">Stay In The Loop</p>
+    <h2 style="font-weight:500">Join the Jewels List</h2>
+    <p style="color:var(--muted);margin-top:.5rem">Early access to new drops, private sales and styling tips. No spam — ever.</p>
+    <form class="news-form" id="newsForm">
+      <input type="email" placeholder="Your email address" required>
+      <button class="btn" type="submit">Subscribe</button>
+    </form>
+    <p class="news-ok" id="newsOk">✓ You're in! Welcome to the family.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="foot-grid">
+    <div>
+      <div class="foot-logo">Jewels<span>.shop</span></div>
+      <p style="font-size:.92rem;max-width:34ch">Fine jewelry crafted with ethically sourced stones and recycled gold.</p>
+    </div>
+    <div><h4>Shop</h4><ul><li><a href="#shop">Rings</a></li><li><a href="#shop">Necklaces</a></li><li><a href="#shop">Earrings</a></li><li><a href="#shop">Bracelets</a></li><li><a href="#shop">Watches</a></li></ul></div>
+    <div><h4>Support</h4><ul><li><a href="#">Shipping</a></li><li><a href="#">Returns</a></li><li><a href="#">Size Guide</a></li><li><a href="#">FAQ</a></li></ul></div>
+    <div><h4>Contact</h4><ul><li>📍 128 Goldsmith Lane, New York</li><li>📞 +1 (555) 012-3456</li><li>✉️ hello@jewels.shop</li></ul></div>
+  </div>
+  <div class="foot-bottom">
+    <span>© 2025 Jewels.shop — All rights reserved.</span>
+    <div style="display:flex;gap:1.2rem;align-items:center">
+      <button class="admin-link" onclick="openAdmin()">⚙ Product Admin</button>
+      <div class="pay-badges"><span>VISA</span><span>MASTERCARD</span><span>PAYPAL</span></div>
+    </div>
+  </div>
+</footer>
+
+<div class="overlay" id="overlay"></div>
+<aside class="drawer" id="cartDrawer">
+  <div class="drawer-head"><h3 class="serif">Your Cart</h3><button class="close-x" id="closeCart">✕</button></div>
+  <div class="cart-items" id="cartItems"></div>
+  <div class="drawer-foot" id="cartFoot" style="display:none">
+    <div class="promo-row"><input type="text" id="promoInput" placeholder="Promo code"><button id="applyPromo">Apply</button></div>
+    <p class="promo-applied" id="promoApplied">✓ WELCOME10 applied — 10% off!</p>
+    <div class="total-row"><span>Subtotal</span><span id="subTotal">$0</span></div>
+    <div class="total-row" id="discRow" style="display:none"><span>Discount (10%)</span><span id="discAmt">–$0</span></div>
+    <div class="total-row"><span>Shipping</span><span id="shipAmt">—</span></div>
+    <div class="total-row grand"><span>Total</span><span id="grandTotal">$0</span></div>
+    <button class="btn checkout-btn" id="checkoutBtn">Proceed to Checkout</button>
+  </div>
+</aside>
+
+<div class="modal" id="qvModal">
+  <div class="modal-card"><button class="close-x" data-close="qvModal">✕</button><div class="qv-grid" id="qvContent"></div></div>
+</div>
+
+<div class="modal" id="coModal">
+  <div class="modal-card">
+    <button class="close-x" data-close="coModal">✕</button>
+    <div class="co-wrap" id="coFormWrap">
+      <h3 class="serif">Checkout</h3>
+      <div class="co-summary" id="coSummary"></div>
+      <form class="co-form" id="coForm">
+        <input required id="coName" placeholder="Full name">
+        <input required type="email" id="coEmail" placeholder="Email address">
+        <input required class="full" id="coAddr" placeholder="Street address">
+        <input required id="coCity" placeholder="City">
+        <input required id="coZip" placeholder="ZIP / Postal code">
+        <input required class="full" id="coCard" placeholder="Card number (demo — never stored)">
+        <button class="btn full" style="justify-content:center" type="submit">Place Order</button>
+      </form>
+    </div>
+    <div class="co-success" id="coSuccess">
+      <div class="tick">✓</div>
+      <h3 class="serif">Thank you for your order!</h3>
+      <p>Order <b id="orderNo">#JWS-0000</b> confirmed. A receipt is on its way to your inbox.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ADMIN: manage products in your Firebase database -->
+<div class="modal" id="adminModal">
+  <div class="modal-card">
+    <button class="close-x" data-close="adminModal">✕</button>
+    <div class="co-wrap">
+      <h3 class="serif">⚙ Product Manager</h3>
+      <p class="db-status" id="dbStatus"></p>
+      <form class="co-form" id="adminForm">
+        <input required class="full" id="apName" placeholder="Product name">
+        <select id="apCat"><option>Rings</option><option>Necklaces</option><option>Earrings</option><option>Bracelets</option><option>Watches</option></select>
+        <select id="apBadge"><option value="">No badge</option><option>New</option><option>Sale</option><option>Bestseller</option></select>
+        <input required type="number" id="apPrice" placeholder="Price ($) e.g. 899">
+        <input type="number" id="apOld" placeholder="Old price — optional (for Sale)">
+        <input required type="number" id="apRating" placeholder="Rating 1–5" value="4.8" step="0.1" min="1" max="5">
+        <input class="full" id="apDesc" placeholder="Short description">
+        <button class="btn full" style="justify-content:center" type="submit">+ Add Product to Database</button>
+      </form>
+      <h4 class="serif" style="margin-top:1.6rem;font-weight:500">Products in database</h4>
+      <div class="admin-list" id="adminList"></div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"><span class="t-ico">✦</span><span id="toastMsg"></span></div>
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+<script>
+/* ════════════════════════════════════════════════════════
+   🔥 FIREBASE SETUP — PASTE YOUR KEYS FROM PART 1, STEP 2
+   ════════════════════════════════════════════════════════ */
+const firebaseConfig = {
+  apiKey: "AIzaSyC0-3J4d4A67O6EbCRYHsz3hM0cUW1iMY4",
+  authDomain: "test-73578.firebaseapp.com",
+  databaseURL: "https://test-73578-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "test-73578",
+  storageBucket: "test-73578.firebasestorage.app",
+  messagingSenderId: "595268309495",
+  appId: "1:595268309495:web:1c16409af94ef7da89def2",
+  measurementId: "G-LN7VB97435"
+};
+/* ════════════════════ END OF SETUP ═════════════════════ */
+
+const isConfigured = !Object.values(firebaseConfig).some(v => String(v).includes("PASTE"));
+let db = null;
+if (isConfigured && window.firebase) {
+  firebase.initializeApp(firebaseConfig);
+  db = firebase.firestore();
+}
+
+/* ---- Demo data: seeds the database & works offline ---- */
+const DEMO_PRODUCTS = [
+  {name:"Radiant Solitaire Ring", cat:"Rings", price:1299, old:1599, rating:4.9, badge:"Sale", bg:"linear-gradient(135deg,#fdf0ec,#f3cdc5)", icon:"ring", desc:"A brilliant-cut center stone in a six-prong setting on a slim 18k gold band."},
+  {name:"Golden Eternity Band", cat:"Rings", price:899, old:null, rating:4.8, badge:"Bestseller", bg:"linear-gradient(135deg,#fdf6e9,#eedab0)", icon:"ring", desc:"Pavé diamonds circle the entire band — endless sparkle for milestones."},
+  {name:"Rose Quartz Halo Ring", cat:"Rings", price:1149, old:null, rating:4.7, badge:"New", bg:"linear-gradient(135deg,#fbeef6,#eccfe2)", icon:"ring", desc:"Blush rose quartz framed by a diamond halo, set in rose gold vermeil."},
+  {name:"Diamond Drop Pendant", cat:"Necklaces", price:759, old:null, rating:4.9, badge:null, bg:"linear-gradient(135deg,#f3f0fa,#d9d2ef)", icon:"necklace", desc:"A teardrop diamond suspended from a delicate cable chain."},
+  {name:"Classic Gold Chain", cat:"Necklaces", price:529, old:649, rating:4.6, badge:"Sale", bg:"linear-gradient(135deg,#fdf6e9,#eedab0)", icon:"necklace", desc:"Signature flat-link chain in polished 14k gold. Layers beautifully."},
+  {name:"Sapphire Dream Necklace", cat:"Necklaces", price:1199, old:null, rating:5.0, badge:"Bestseller", bg:"linear-gradient(135deg,#eaf1fb,#c3d7ef)", icon:"necklace", desc:"Deep blue sapphire cabochon on a fine gold chain."},
+  {name:"Stellar Diamond Studs", cat:"Earrings", price:649, old:null, rating:4.8, badge:null, bg:"linear-gradient(135deg,#f8f6f2,#e8e2d6)", icon:"earrings", desc:"Round brilliant diamonds in four-prong baskets."},
+  {name:"Boho Gold Hoops", cat:"Earrings", price:299, old:null, rating:4.5, badge:"New", bg:"linear-gradient(135deg,#fdf0ec,#f3cdc5)", icon:"earrings", desc:"Featherlight textured hoops with a warm satin finish."},
+  {name:"Pearl Cascade Drops", cat:"Earrings", price:459, old:529, rating:4.7, badge:"Sale", bg:"linear-gradient(135deg,#f3f0fa,#d9d2ef)", icon:"earrings", desc:"Three freshwater pearls graduate down a fine gold thread."},
+  {name:"Tennis Deluxe Bracelet", cat:"Bracelets", price:999, old:null, rating:4.9, badge:"Bestseller", bg:"linear-gradient(135deg,#eaf1fb,#c3d7ef)", icon:"bracelet", desc:"A river of round brilliants in a secure four-prong line."},
+  {name:"Twist Bangle", cat:"Bracelets", price:449, old:null, rating:4.6, badge:null, bg:"linear-gradient(135deg,#fdf6e9,#eedab0)", icon:"bracelet", desc:"Hand-twisted gold rope bangle with a hidden clasp."},
+  {name:"Royal Chrono Watch", cat:"Watches", price:1899, old:null, rating:4.8, badge:"New", bg:"linear-gradient(135deg,#f8f6f2,#e8e2d6)", icon:"watch", desc:"Swiss movement, sapphire crystal and a gold PVD bracelet."}
+];
+const CAT_STYLE = {
+  "Rings":     {bg:"linear-gradient(135deg,#fdf0ec,#f3cdc5)", icon:"ring"},
+  "Necklaces": {bg:"linear-gradient(135deg,#f3f0fa,#d9d2ef)", icon:"necklace"},
+  "Earrings":  {bg:"linear-gradient(135deg,#f8f6f2,#e8e2d6)", icon:"earrings"},
+  "Bracelets": {bg:"linear-gradient(135deg,#fdf6e9,#eedab0)", icon:"bracelet"},
+  "Watches":   {bg:"linear-gradient(135deg,#eaf1fb,#c3d7ef)", icon:"watch"}
+};
+const CATS = ["All","Rings","Necklaces","Earrings","Bracelets","Watches"];
+
+/* ---- State ---- */
+const store = {
+  get(k,f){ try{ return JSON.parse(localStorage.getItem(k)) ?? f }catch(e){ return f } },
+  set(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)) }catch(e){} }
+};
+let PRODUCTS = DEMO_PRODUCTS.map((p,i)=>({ id:String(i+1), ...p }));
+let cart = store.get('jewels_cart', {});
+let wishlist = store.get('jewels_wishlist', []);
+let promo = false, wishFilter = false;
+let currentCat = "All", currentSort = "featured", query = "";
+
+/* ---- Helpers ---- */
+const $ = s => document.querySelector(s);
+const fmt = n => '$' + Number(n).toLocaleString();
+const prod = id => PRODUCTS.find(p => String(p.id) === String(id));
+function icon(type, w=100){
+  const g='url(#goldGrad)', d='url(#gemGrad)';
+  const S={
+    ring:`<circle cx="50" cy="63" r="23" fill="none" stroke="${g}" stroke-width="5"/><path d="M50 16 L64 32 L50 48 L36 32 Z" fill="${d}" stroke="#b8c4d4"/><path d="M41 46 L59 46 L55 53 L45 53 Z" fill="${g}"/>`,
+    necklace:`<path d="M18 18 Q50 66 82 18" fill="none" stroke="${g}" stroke-width="3.5" stroke-dasharray="1 5" stroke-linecap="round"/><circle cx="50" cy="55" r="4.5" fill="${g}"/><path d="M50 59 Q63 74 50 89 Q37 74 50 59 Z" fill="${d}" stroke="#b8c4d4"/>`,
+    earrings:`<circle cx="33" cy="28" r="6" fill="${g}"/><path d="M33 34 Q42 46 33 60 Q24 46 33 34 Z" fill="${d}" stroke="#b8c4d4"/><circle cx="67" cy="28" r="6" fill="${g}"/><path d="M67 34 Q76 46 67 60 Q58 46 67 34 Z" fill="${d}" stroke="#b8c4d4"/>`,
+    bracelet:`<ellipse cx="50" cy="56" rx="30" ry="23" fill="none" stroke="${g}" stroke-width="5.5"/><circle cx="50" cy="33" r="6.5" fill="${d}" stroke="#b8c4d4"/><circle cx="74" cy="46" r="4" fill="${g}"/><circle cx="26" cy="46" r="4" fill="${g}"/>`,
+    watch:`<rect x="41" y="8" width="18" height="26" rx="5" fill="${g}"/><rect x="41" y="66" width="18" height="26" rx="5" fill="${g}"/><circle cx="50" cy="50" r="21" fill="#fffdf7" stroke="${g}" stroke-width="5.5"/><path d="M50 50 L50 38 M50 50 L59 55" stroke="#2b2b33" stroke-width="2.5" stroke-linecap="round"/>`
+  };
+  return `<svg viewBox="0 0 100 100" width="${w}" height="${w}">${S[type]||S.ring}</svg>`;
+}
+const stars = r => '★'.repeat(Math.round(r)) + `<small>${Number(r).toFixed(1)}</small>`;
+function toast(msg){
+  $('#toastMsg').textContent = msg;
+  $('#toast').classList.add('show');
+  clearTimeout(toast._t);
+  toast._t = setTimeout(()=> $('#toast').classList.remove('show'), 2400);
+}
+
+/* ══════════════ FIREBASE: LOAD PRODUCTS ══════════════ */
+async function loadProducts(){
+  if(!db) return;
+  try{
+    const snap = await db.collection("products").get();
+    if(snap.empty){
+      $('#seedBanner').style.display = 'flex';
+      return;
+    }
+    $('#seedBanner').style.display = 'none';
+    PRODUCTS = snap.docs.map(d => ({ id:d.id, ...d.data() }));
+    renderAll();
+  }catch(err){
+    console.error(err);
+    toast("⚠ Couldn't reach Firebase — showing demo products");
+  }
+}
+
+/* ══════════════ FIREBASE: SEED DEMO PRODUCTS ══════════════ */
+ $('#seedBtn').addEventListener('click', async ()=>{
+  if(!db){ toast("Add your Firebase keys first — see setup steps"); return; }
+  const btn = $('#seedBtn'); btn.textContent = "Uploading…"; btn.disabled = true;
+  try{
+    const batch = db.batch();
+    DEMO_PRODUCTS.forEach(({badge, ...p}) => batch.set(db.collection("products").doc(), {...p, badge: badge || ""}));
+    await batch.commit();
+    toast("✓ 12 products uploaded to Firebase!");
+    await loadProducts();
+  }catch(err){
+    console.error(err);
+    toast("Upload failed — check Firestore rules are in test mode");
+  }
+  btn.textContent = "Load 12 demo products"; btn.disabled = false;
+});
+
+/* ══════════════ FIREBASE: SAVE ORDERS ══════════════ */
+async function saveOrder(customer, total, disc){
+  if(!db) return;
+  try{
+    await db.collection("orders").add({
+      items: Object.keys(cart).filter(id=>prod(id)).map(id => ({
+        id, name: prod(id).name, price: prod(id).price, qty: cart[id]
+      })),
+      subtotal: total + disc + (total >= 150 || total===0 ? 0 : 12) - 0, // recalculated below
+      total, discount: disc, promo: promo ? "WELCOME10" : "",
+      customer, status: "new",
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+  }catch(err){ console.error("Order save failed:", err); }
+}
+
+/* ============ PRODUCTS RENDER ============ */
+function renderAll(){ renderCats(); renderChips(); renderProducts(); }
+function visibleProducts(){
+  let list = PRODUCTS.filter(p =>
+    (currentCat === "All" || p.cat === currentCat) &&
+    (!wishFilter || wishlist.some(x=>String(x)===String(p.id))) &&
+    (!query || (p.name + " " + p.cat).toLowerCase().includes(query))
+  );
+  if(currentSort === "low")    list.sort((a,b)=>a.price-b.price);
+  if(currentSort === "high")   list.sort((a,b)=>b.price-a.price);
+  if(currentSort === "rating") list.sort((a,b)=>b.rating-a.rating);
+  return list;
+}
+function renderChips(){
+  $('#filterChips').innerHTML = CATS.map(c =>
+    `<button class="chip ${c===currentCat?'active':''}" data-cat="${c}">${c}</button>`).join('');
+}
+function renderProducts(){
+  const list = visibleProducts();
+  $('#productGrid').innerHTML = list.length ? list.map((p,i)=>`
+    <article class="card" style="animation-delay:${i*60}ms">
+      <div class="p-visual" style="background:${p.bg}" onclick="quickView('${p.id}')">
+        ${p.badge ? `<span class="p-badge ${p.badge==='Sale'?'sale':p.badge==='New'?'new':''}">${p.badge}</span>` : ''}
+        <button class="wish-btn ${wishlist.some(x=>String(x)===String(p.id))?'on':''}" onclick="event.stopPropagation();toggleWish('${p.id}')" aria-label="Wishlist">
+          <svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.7-10-9.3C.6 8.6 2.6 5 6.2 5c2.2 0 3.7 1.2 4.6 2.6L12 9l1.2-1.4C14.1 6.2 15.6 5 17.8 5c3.6 0 5.6 3.6 4.2 6.7C19.5 16.3 12 21 12 21z"/></svg>
+        </button>
+        ${icon(p.icon,130)}
+        <div class="p-overlay"><button class="qv-btn" onclick="event.stopPropagation();quickView('${p.id}')">👁 Quick View</button></div>
+      </div>
+      <div class="p-info">
+        <span class="p-cat">${p.cat}</span>
+        <h3 class="p-name">${p.name}</h3>
+        <div class="stars">${stars(p.rating)}</div>
+        <div class="p-bottom">
+          <span class="price">${fmt(p.price)}${p.old?`<s>${fmt(p.old)}</s>`:''}</span>
+          <button class="add-btn" onclick="addToCart('${p.id}')">+ Add</button>
+        </div>
+      </div>
+    </article>`).join('')
+  : `<p class="empty-msg">No pieces found. Try a different search or category ✦</p>`;
+}
+
+function renderCats(){
+  $('#catGrid').innerHTML = ["Rings","Necklaces","Earrings","Bracelets","Watches"].map(c=>{
+    const n = PRODUCTS.filter(p=>p.cat===c).length;
+    return `<div class="cat-card" onclick="filterTo('${c}')">
+      ${icon(CAT_STYLE[c].icon,64)}<b>${c}</b><small>${n} pieces</small></div>`;
+  }).join('');
+}
+function filterTo(cat){
+  currentCat = cat; wishFilter = false; $('#wishNote').classList.remove('show');
+  renderChips(); renderProducts();
+  document.getElementById('shop').scrollIntoView({behavior:'smooth'});
+}
+
+/* ============ CART ============ */
+function addToCart(id, qty=1){
+  id = String(id);
+  if(!prod(id)) return;
+  cart[id] = (cart[id]||0) + qty;
+  store.set('jewels_cart', cart);
+  updateCartUI();
+  toast(`${prod(id).name} added to cart`);
+}
+function changeQty(id, d){
+  id = String(id);
+  cart[id] = (cart[id]||0) + d;
+  if(cart[id] <= 0) delete cart[id];
+  store.set('jewels_cart', cart); updateCartUI();
+}
+function removeItem(id){ delete cart[String(id)]; store.set('jewels_cart',cart); updateCartUI(); toast('Removed from cart'); }
+function cartTotals(){
+  const ids = Object.keys(cart).filter(id => prod(id));
+  const sub = ids.reduce((s,id)=> s + prod(id).price * cart[id], 0);
+  const disc = promo ? Math.round(sub * .10) : 0;
+  const ship = sub === 0 ? 0 : (sub - disc >= 150 ? 0 : 12);
+  return {sub, disc, ship, total: sub - disc + ship, count: ids.reduce((s,id)=>s+cart[id],0)};
+}
+function updateCartUI(){
+  const t = cartTotals();
+  const badge = $('#cartBadge');
+  badge.textContent = t.count; badge.classList.toggle('show', t.count>0);
+  const ids = Object.keys(cart).filter(id => prod(id));
+  if(!ids.length){
+    $('#cartItems').innerHTML = `<div class="cart-empty">
+      <svg viewBox="0 0 24 24"><path d="M6 7h12l-1.2 12.2a2 2 0 0 1-2 1.8H9.2a2 2 0 0 1-2-1.8L6 7z"/><path d="M9 10V6a3 3 0 0 1 6 0v4"/></svg>
+      <p>Your cart is feeling light.</p>
+      <button class="btn" style="margin-top:1.2rem" onclick="closeCart()">Browse Jewelry</button></div>`;
+  } else {
+    $('#cartItems').innerHTML = ids.map(id=>{ const p = prod(id); return `
+      <div class="c-item">
+        <div class="c-thumb" style="background:${p.bg}">${icon(p.icon,52)}</div>
+        <div>
+          <div class="c-name">${p.name}</div>
+          <div class="c-price">${fmt(p.price)}</div>
+          <div class="qty">
+            <button onclick="changeQty('${id}',-1)">−</button><b>${cart[id]}</b>
+            <button onclick="changeQty('${id}',1)">+</button>
+          </div>
+        </div>
+        <button class="c-remove" onclick="removeItem('${id}')">Remove</button>
+      </div>`; }).join('');
+  }
+  $('#cartFoot').style.display = ids.length ? 'block' : 'none';
+  $('#subTotal').textContent = fmt(t.sub);
+  $('#discRow').style.display = t.disc ? 'flex' : 'none';
+  $('#discAmt').textContent = '–' + fmt(t.disc);
+  $('#shipAmt').textContent = t.ship === 0 ? 'Free' : fmt(t.ship);
+  $('#grandTotal').textContent = fmt(t.total);
+}
+function openCart(){ $('#cartDrawer').classList.add('open'); $('#overlay').classList.add('show'); document.body.style.overflow='hidden'; }
+function closeCart(){ $('#cartDrawer').classList.remove('open'); $('#overlay').classList.remove('show'); document.body.style.overflow=''; }
+
+/* ============ WISHLIST ============ */
+function toggleWish(id){
+  id = String(id);
+  const i = wishlist.findIndex(x => String(x) === id);
+  if(i > -1){ wishlist.splice(i,1); toast('Removed from wishlist'); }
+  else { wishlist.push(id); toast(`${prod(id).name} saved to wishlist ♥`); }
+  store.set('jewels_wishlist', wishlist);
+  const wb = $('#wishBadge'); wb.textContent = wishlist.length; wb.classList.toggle('show', wishlist.length>0);
+  renderProducts();
+  if(qvOpenId) renderQuickView(qvOpenId);
+}
+ $('#wishNavBtn').addEventListener('click', ()=>{
+  wishFilter = !wishFilter; $('#wishNote').classList.toggle('show', wishFilter);
+  renderProducts();
+  if(wishFilter) document.getElementById('shop').scrollIntoView({behavior:'smooth'});
+});
+ $('#clearWishFilter').addEventListener('click', ()=>{ wishFilter=false; $('#wishNote').classList.remove('show'); renderProducts(); });
+
+/* ============ QUICK VIEW ============ */
+let qvOpenId = null, qvQty = 1;
+function quickView(id){ qvOpenId = String(id); qvQty = 1; renderQuickView(id); openModal('qvModal'); }
+function renderQuickView(id){
+  const p = prod(id); if(!p) return;
+  $('#qvContent').innerHTML = `
+    <div class="qv-visual" style="background:${p.bg}">${icon(p.icon,210)}</div>
+    <div class="qv-info">
+      <span class="p-cat">${p.cat}</span>
+      <h2 class="p-name">${p.name}</h2>
+      <div class="stars">${stars(p.rating)}</div>
+      <p class="desc">${p.desc||''}</p>
+      <div class="qv-price">${fmt(p.price)}${p.old?` <s style="font-size:1rem;color:var(--muted)">${fmt(p.old)}</s>`:''}</div>
+      <div class="qv-row">
+        <div class="qv-qty"><button onclick="qvChange(-1)">−</button><b id="qvQty">${qvQty}</b><button onclick="qvChange(1)">+</button></div>
+        <button class="btn" onclick="addToCart('${id}', qvQty); closeModal('qvModal')">Add to Cart</button>
+        <button class="wish-btn ${wishlist.some(x=>String(x)===String(id))?'on':''}" style="position:static" onclick="toggleWish('${id}')">
+          <svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.7-10-9.3C.6 8.6 2.6 5 6.2 5c2.2 0 3.7 1.2 4.6 2.6L12 9l1.2-1.4C14.1 6.2 15.6 5 17.8 5c3.6 0 5.6 3.6 4.2 6.7C19.5 16.3 12 21 12 21z"/></svg>
+        </button>
+      </div>
+      <p style="margin-top:1.4rem;font-size:.85rem;color:var(--muted)">✓ Free shipping over $150 · ✓ 30-day returns · ✓ Lifetime warranty</p>
+    </div>`;
+}
+function qvChange(d){ qvQty = Math.max(1, Math.min(9, qvQty + d)); $('#qvQty').textContent = qvQty; }
+
+/* ============ MODALS ============ */
+function openModal(id){ $('#'+id).classList.add('show'); document.body.style.overflow='hidden'; }
+function closeModal(id){ $('#'+id).classList.remove('show'); document.body.style.overflow=''; if(id==='qvModal') qvOpenId=null; }
+document.querySelectorAll('[data-close]').forEach(b => b.addEventListener('click', ()=> closeModal(b.dataset.close)));
+document.querySelectorAll('.modal').forEach(m => m.addEventListener('click', e => { if(e.target === m) closeModal(m.id); }));
+document.addEventListener('keydown', e => { if(e.key === 'Escape'){ closeModal('qvModal'); closeModal('coModal'); closeModal('adminModal'); closeCart(); } });
+
+/* ══════════════ FIREBASE: ADMIN PANEL ══════════════ */
+function openAdmin(){
+  $('#dbStatus').textContent = db
+    ? "🟢 Connected to Firebase project: " + firebaseConfig.projectId
+    : "🟡 Demo mode — paste your Firebase keys at the top of the script to connect.";
+  openModal('adminModal');
+  renderAdminList();
+}
+async function renderAdminList(){
+  const box = $('#adminList');
+  if(!db){ box.innerHTML = `<div class="admin-item"><span>Connect Firebase to manage real products.</span></div>`; return; }
+  try{
+    const snap = await db.collection("products").get();
+    box.innerHTML = snap.empty ? `<div class="admin-item"><span>No products yet — add one above ↑</span></div>`
+      : snap.docs.map(d=>{
+          const p = d.data();
+          return `<div class="admin-item"><span>${p.name} <small>· ${p.cat} · ${fmt(p.price)}</small></span>
+                  <button onclick="deleteProduct('${d.id}')">Delete</button></div>`;
+        }).join('');
+  }catch(err){ box.innerHTML = `<div class="admin-item"><span>⚠ Could not load products</span></div>`; }
+}
+ $('#adminForm').addEventListener('submit', async e=>{
+  e.preventDefault();
+  if(!db){ toast("Connect Firebase first!"); return; }
+  const cat = $('#apCat').value;
+  const doc = {
+    name: $('#apName').value.trim(),
+    cat,
+    price: Number($('#apPrice').value),
+    old: $('#apOld').value ? Number($('#apOld').value) : null,
+    rating: Number($('#apRating').value) || 4.8,
+    badge: $('#apBadge').value,
+    bg: CAT_STYLE[cat].bg,
+    icon: CAT_STYLE[cat].icon,
+    desc: $('#apDesc').value.trim()
+  };
+  try{
+    await db.collection("products").add(doc);
+    toast(`✓ "${doc.name}" added to the database`);
+    e.target.reset(); $('#apRating').value = 4.8;
+    await loadProducts(); renderAdminList();
+  }catch(err){ console.error(err); toast("Save failed — check Firestore rules"); }
+});
+async function deleteProduct(id){
+  if(!confirm("Delete this product from the database?")) return;
+  try{
+    await db.collection("products").doc(id).delete();
+    toast("Product deleted");
+    await loadProducts(); renderAdminList();
+  }catch(err){ toast("Delete failed — check Firestore rules"); }
+}
+
+/* ============ CHECKOUT ============ */
+ $('#checkoutBtn').addEventListener('click', ()=>{
+  const t = cartTotals();
+  const lines = Object.keys(cart).filter(id=>prod(id)).map(id=>
+    `<div class="co-line"><span>${prod(id).name} × ${cart[id]}</span><b>${fmt(prod(id).price*cart[id])}</b></div>`).join('');
+  $('#coSummary').innerHTML = lines +
+    (t.disc ? `<div class="co-line"><span>Discount (WELCOME10)</span><b>–${fmt(t.disc)}</b></div>` : '') +
+    `<div class="co-line"><span>Shipping</span><b>${t.ship?fmt(t.ship):'Free'}</b></div>` +
+    `<div class="co-line" style="border-top:1px dashed #ddd;margin-top:.4rem;padding-top:.6rem;font-size:1.05rem"><span>Total</span><b style="color:var(--gold-dark)">${fmt(t.total)}</b></div>`;
+  $('#coFormWrap').style.display = 'block'; $('#coSuccess').style.display = 'none';
+  closeCart(); openModal('coModal');
+});
+ $('#coForm').addEventListener('submit', async e=>{
+  e.preventDefault();
+  const t = cartTotals();
+  const customer = {
+    name: $('#coName').value, email: $('#coEmail').value,
+    address: $('#coAddr').value, city: $('#coCity').value, zip: $('#coZip').value
+  };
+  await saveOrder(customer, t.total, t.disc); // saved to Firestore "orders" collection (card number is never stored)
+  $('#orderNo').textContent = '#JWS-' + Math.floor(1000 + Math.random()*9000);
+  $('#coFormWrap').style.display = 'none'; $('#coSuccess').style.display = 'block';
+  cart = {}; promo = false; $('#promoInput').value=''; $('#promoApplied').style.display='none';
+  store.set('jewels_cart', cart); updateCartUI();
+});
+
+/* ============ PROMO ============ */
+ $('#applyPromo').addEventListener('click', ()=>{
+  if($('#promoInput').value.trim().toUpperCase() === 'WELCOME10'){
+    promo = true; $('#promoApplied').style.display='block'; toast('Promo applied — 10% off ✦'); updateCartUI();
+  } else toast('Invalid code — try WELCOME10');
+});
+
+/* ============ EVENTS ============ */
+ $('#cartBtn').addEventListener('click', openCart);
+ $('#closeCart').addEventListener('click', closeCart);
+ $('#overlay').addEventListener('click', closeCart);
+ $('#filterChips').addEventListener('click', e=>{
+  const b = e.target.closest('.chip'); if(!b) return;
+  currentCat = b.dataset.cat; renderChips(); renderProducts();
+});
+ $('#sortSelect').addEventListener('change', e=>{ currentSort = e.target.value; renderProducts(); });
+ $('#searchInput').addEventListener('input', e=>{
+  query = e.target.value.trim().toLowerCase(); renderProducts();
+});
+ $('#hamburger').addEventListener('click', ()=> $('#navLinks').classList.toggle('open'));
+document.querySelectorAll('.nav-links a').forEach(a => a.addEventListener('click', ()=> $('#navLinks').classList.remove('open')));
+ $('#newsForm').addEventListener('submit', e=>{ e.preventDefault(); $('#newsOk').style.display='block'; e.target.reset(); toast('Subscribed! Welcome to Jewels.shop ✦'); });
+window.addEventListener('scroll', ()=> $('#header').classList.toggle('scrolled', scrollY > 10));
+
+/* ============ REVEAL + INIT ============ */
+const io = new IntersectionObserver(es=>es.forEach(en=>{ if(en.isIntersecting){ en.target.classList.add('visible'); io.unobserve(en.target);} }),{threshold:.12});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+renderAll(); updateCartUI();
+const wb = $('#wishBadge'); wb.textContent = wishlist.length; wb.classList.toggle('show', wishlist.length>0);
+loadProducts(); // 🔥 pull products from Firebase (falls back to demo if not configured)
+</script>
+</body>
+</html>
